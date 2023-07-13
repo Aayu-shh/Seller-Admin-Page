@@ -1,0 +1,1 @@
+An Admin page for Ecommerce Seller to add product, see products list, Delete from products list and get total value (price) of his inventory in real-time.

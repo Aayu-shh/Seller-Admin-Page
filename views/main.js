@@ -6,7 +6,11 @@ const itemList = document.querySelector('#itemList');
 const totalValue = document.querySelector('#value_header')
 
 window.addEventListener('DOMContentLoaded', (e) => {
-
+    axios.get("http://localhost:8080/products")
+    .then((respObj)=>{
+        (respObj.data).forEach(resp => showOutput(resp))
+    })
+    .catch(err => console.log(err));
 });
 
 myForm.addEventListener('submit', (e) => {
@@ -15,7 +19,10 @@ myForm.addEventListener('submit', (e) => {
         name: named.value,
         price: price.value
     }
-    showOutput(obj);
+    axios.post('http://localhost:8080/add-product', obj)
+        .then((resultObj) => showOutput(resultObj.data))
+        .catch(err => console.log(err));
+
 })
 
 function showOutput(obj) {
@@ -33,10 +40,14 @@ function showOutput(obj) {
     }
 
     delBtn.onclick = () => {
-
-        itemList.removeChild(li);
-        console.log(objLocal.name+' was deleted from server');
+        axios.delete(`http://localhost:8080/delete-product/${obj.id}`)
+        .then(()=>{
+            itemList.removeChild(li);
+            console.log(objLocal.name + ' was deleted from server');
+        })
     }
+    named.value = "";
+    price.value = "";
 
-    totalValue.appendChild(document.createTextNode(obj.price))
+    totalValue.appendChild(document.createTextNode(+obj.price))
 }
